@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>此时此刻，你最想跟葱葱干什么</title>
+    <style>
+        :root {
+            --bg-start: #fef9f4;
+            --bg-end: #fff0f5;
+            --card-bg: #ffffff;
+            --text-main: #4a3b32;
+            --text-sub: #6b5b4f;
+            --pink: #f0a8b8;
+            --pink-deep: #e8879e;
+            --green-soft: #b8d4a8;
+            --green-deep: #8ab87a;
+            --coral: #f7b89c;
+            --lavender: #d4b8d4;
+            --gold: #e8c98b;
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 14px 40px rgba(0, 0, 0, 0.14);
+            --radius-lg: 28px;
+            --radius-md: 18px;
+            --radius-sm: 12px;
+            --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(160deg, #fef9f4 0%, #fff5f0 25%, #fff0f5 50%, #fdf6f9 75%, #fefcf8 100%);
+            background-attachment: fixed;
+            font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* 背景装饰 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -120px;
+            right: -80px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(240, 168, 184, 0.18) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatBlob1 14s ease-in-out infinite;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -100px;
+            left: -90px;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(184, 212, 168, 0.16) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatBlob2 16s ease-in-out infinite;
+        }
+        @keyframes floatBlob1 {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(-30px, 25px) scale(1.08);
+            }
+            50% {
+                transform: translate(15px, -20px) scale(0.94);
+            }
+            75% {
+                transform: translate(20px, 30px) scale(1.05);
+            }
+        }
+        @keyframes floatBlob2 {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            30% {
+                transform: translate(25px, -20px) scale(1.1);
+            }
+            60% {
+                transform: translate(-18px, 15px) scale(0.92);
+            }
+            85% {
+                transform: translate(-10px, -25px) scale(1.04);
+            }
+        }
+        /* 浮动装饰粒子 */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.45;
+            animation: particleFloat linear infinite;
+        }
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+                opacity: 0.5;
+            }
+            25% {
+                transform: translateY(-60px) translateX(30px) rotate(90deg) scale(1.3);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-30px) translateX(-20px) rotate(180deg) scale(0.8);
+                opacity: 0.35;
+            }
+            75% {
+                transform: translateY(-80px) translateX(15px) rotate(270deg) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(0) translateX(0) rotate(360deg) scale(1);
+                opacity: 0.5;
+            }
+        }
+        /* 主容器 */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 780px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+        }
+        /* 标题区域 */
+        .header {
+            text-align: center;
+            position: relative;
+        }
+        .header .icon-row {
+            font-size: 42px;
+            margin-bottom: 6px;
+            animation: bounceIcon 2s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes bounceIcon {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-16px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+            80% {
+                transform: translateY(-10px);
+            }
+        }
+        .header h1 {
+            font-size: clamp(1.5rem, 3.5vw, 2rem);
+            font-weight: 700;
+            color: #5a3e36;
+            letter-spacing: 0.04em;
+            line-height: 1.4;
+            background: linear-gradient(135deg, #6b4b3e 0%, #9b6e5e 40%, #c48a7a 70%, #8b6a5a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            position: relative;
+            display: inline-block;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: #b09588;
+            margin-top: 2px;
+            letter-spacing: 0.06em;
+            font-weight: 400;
+        }
+        .header .decorative-line {
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #f0c8b8, #e8b4a8, #f0c8b8);
+            border-radius: 3px;
+            margin: 10px auto 0;
+            opacity: 0.7;
+        }
+        /* 选项网格 */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            width: 100%;
+        }
+        @media (max-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            .modal-content {
+                padding: 24px 18px !important;
+                margin: 0 10px;
+            }
+            .modal-gif {
+                max-height: 180px !important;
+            }
+        }
+        /* 选项卡片 - 仅保留文字，移除GIF区域 */
+        .option-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 24px 16px 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            text-align: center;
+            min-height: 140px;
+        }
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: #f0d0c8;
+        }
+        .option-card:active {
+            transform: scale(0.97);
+            transition: 0.15s ease;
+        }
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .option-card.card-a::before {
+            background: radial-gradient(circle, rgba(255, 200, 180, 0.3) 0%, transparent 70%);
+        }
+        .option-card.card-b::before {
+            background: radial-gradient(circle, rgba(240, 160, 180, 0.3) 0%, transparent 70%);
+        }
+        .option-card.card-c::before {
+            background: radial-gradient(circle, rgba(200, 210, 240, 0.3) 0%, transparent 70%);
+        }
+        .option-card.card-d::before {
+            background: radial-gradient(circle, rgba(220, 150, 170, 0.35) 0%, transparent 70%);
+        }
+        .option-card:hover::before {
+            opacity: 1;
+        }
+        .option-card .card-badge {
+            position: absolute;
+            top: 12px;
+            left: 14px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            letter-spacing: 0.02em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+        .card-a .card-badge {
+            background: linear-gradient(135deg, #f7b89c, #f0987a);
+        }
+        .card-b .card-badge {
+            background: linear-gradient(135deg, #f0a8b8, #e8879e);
+        }
+        .card-c .card-badge {
+            background: linear-gradient(135deg, #a8c0e0, #7a9cc6);
+        }
+        .card-d .card-badge {
+            background: linear-gradient(135deg, #d4a0b8, #c4789a);
+        }
+        /* 如果以后想在选项卡片中加入静态照片，可取消下面注释并调整 */
+        /*
+        .option-card .static-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 6px;
+            z-index: 1;
+        }
+        */
+        .option-card .card-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-main);
+            z-index: 1;
+            line-height: 1.6;
+            letter-spacing: 0.03em;
+            padding: 0 8px;
+        }
+        /* 卡片颜色标识条 */
+        .option-card .card-accent {
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            border-radius: 3px 3px 0 0;
+            transition: var(--transition);
+            z-index: 1;
+        }
+        .card-a .card-accent {
+            background: #f7b89c;
+        }
+        .card-b .card-accent {
+            background: #f0a8b8;
+        }
+        .card-c .card-accent {
+            background: #a8c0e0;
+        }
+        .card-d .card-accent {
+            background: #d4a0b8;
+        }
+        .option-card:hover .card-accent {
+            left: 8%;
+            right: 8%;
+            height: 4px;
+        }
+        /* 弹窗遮罩 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(40, 20, 20, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        /* 弹窗内容 */
+        .modal-content {
+            background: #fffdfb;
+            border-radius: var(--radius-lg);
+            padding: 30px 24px 24px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transform: translateY(30px) scale(0.94);
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 101;
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #f5ece8;
+            color: #8b6b5e;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            line-height: 1;
+        }
+        .modal-close:hover {
+            background: #e8d5cc;
+            color: #5a3e36;
+            transform: rotate(90deg);
+        }
+        .modal-gif {
+            width: 100%;
+            max-width: 320px;
+            max-height: 220px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            margin: 0 auto 16px;
+            display: block;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+        .modal-answer {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #5a3e36;
+            line-height: 1.7;
+            letter-spacing: 0.04em;
+            padding: 0 8px;
+            position: relative;
+        }
+        .modal-answer::before {
+            content: ' ';
+            font-size: 1.3rem;
+        }
+        .modal-answer .highlight {
+            color: #e8879e;
+            font-weight: 600;
+        }
+        .modal-emoji-decor {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: block;
+        }
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.25);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        /* 响应式调整 */
+        @media (max-width: 480px) {
+            .option-card {
+                padding: 18px 12px 16px;
+                gap: 10px;
+                min-height: 120px;
+            }
+            .option-card .card-text {
+                font-size: 0.9rem;
+            }
+            .modal-gif {
+                max-width: 240px;
+                max-height: 160px;
+            }
+            .modal-answer {
+                font-size: 1rem;
+            }
+            .header h1 {
+                font-size: 1.2rem;
+            }
+            .header .icon-row {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景浮动粒子 -->
+    <div class="particles-container" id="particlesContainer"></div>
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 标题区域 (保持不变) -->
+        <div class="header">
+            <span class="icon-row"></span>
+            <h1>此时此刻，你最想跟葱葱干什么</h1>
+            <span class="decorative-line"></span>
+            <p class="subtitle">选一个吧 ~ 葱葱在等你</p>
+        </div>
+        <!-- 选项网格 - 仅保留文字，无GIF -->
+        <div class="options-grid">
+            <!-- 选项 A -->
+            <div class="option-card card-a" onclick="selectOption('A')" role="button" tabindex="0" aria-label="选项A">
+                <span class="card-badge">A</span>
+                <!-- ★ 如果以后想在选项卡片中插入静态照片，可在此处添加 <img class="static-photo" src="你的照片地址" alt="照片"> ★ -->
+                <p class="card-text">和葱葱一起牵牵手散散步，<br>最后来个大大的拥抱</p>
+                <span class="card-accent"></span>
+            </div>
+            <!-- 选项 B -->
+            <div class="option-card card-b" onclick="selectOption('B')" role="button" tabindex="0" aria-label="选项B">
+                <span class="card-badge">B</span>
+                <!-- ★ 静态照片插入位置 ★ -->
+                <p class="card-text">和葱葱甜蜜蜜亲亲捏</p>
+                <span class="card-accent"></span>
+            </div>
+            <!-- 选项 C -->
+            <div class="option-card card-c" onclick="selectOption('C')" role="button" tabindex="0" aria-label="选项C">
+                <span class="card-badge">C</span>
+                <!-- ★ 静态照片插入位置 ★ -->
+                <p class="card-text">和葱葱一起打游戏</p>
+                <span class="card-accent"></span>
+            </div>
+            <!-- 选项 D -->
+            <div class="option-card card-d" onclick="selectOption('D')" role="button" tabindex="0" aria-label="选项D">
+                <span class="card-badge">D</span>
+                <!-- ★ 静态照片插入位置 ★ -->
+                <p class="card-text">干葱葱</p>
+                <span class="card-accent"></span>
+            </div>
+        </div>
+    </div>
+    <!-- 弹窗 - 答案GIF在此展示 -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-content" id="modalContent" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModalDirect()" aria-label="关闭">✕</button>
+            <span class="modal-emoji-decor" id="modalEmoji"></span>
+            <!-- ★★★ 答案GIF / 照片显示区域 ★★★ -->
+            <!-- 您可以在下面的 img 标签中替换 src，或通过 answerData 对象统一管理 -->
+            <img class="modal-gif" id="modalGif" src="" alt="回答GIF" loading="lazy">
+            <p class="modal-answer" id="modalAnswer"></p>
+        </div>
+    </div>
+    <script>
+        // ★★★ 自定义GIF/照片地址配置 ★★★
+        // 每个选项对应的答案动图/图片，请将 gif 字段替换为您自己的图片链接 (支持 .gif / .jpg / .png 等)
+        const answerData = {
+            'A': {
+                emoji: '🤗',
+                //  替换为你的A答案图片地址
+                gif: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDNuMmV0bDhnb2tuMnFzZW42eGVnbjFkMGtwaG5mcGxiMmtybyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6Zt8JvQoXNJq0Tew/giphy.gif',
+                gifFallback: '🤗',
+                answer: '彼此指尖刚触到时，葱葱的心就软了，路也变得好长，想这样跟<span class="highlight">小乞丐</span>走一辈子。',
+            },
+            'B': {
+                emoji: '✨',
+                //  替换为你的B答案图片地址
+                gif: 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDRlOG1ycG9kbHVpbmYxeTZ3cTBmMjk1eHBpaXRhMDUxYnB2dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/11rwo3fXqRIt9S/giphy.gif',
+                gifFallback: '',
+                answer: '嘴唇相触柔软而清凉，带着夏日薄暮的微甜。贴近彼此的胸口，那里有<span class="highlight">比夏日更滚烫的温度</span>。',
+            },
+            'C': {
+                emoji: '',
+                //  替换为你的C答案图片地址
+                gif: 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXdkbWQ4eTI3bWw5N2g5NmVhMnBpYm9tdXYxcnlpZHgzNnBlcCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKsQj4hZQx8vXOM/giphy.gif',
+                gifFallback: '✨',
+                answer: '那么肯定会有冰可乐的！<span class="highlight">老公一如既往地厉害哇</span> 🥤',
+            },
+            'D': {
+                emoji: '',
+                //  替换为你的D答案图片地址
+                gif: 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHkwaDJ0cnQwc3B3MnFhMjQ0ajYwdHIzdzVpeTRyZGRpaG4wYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6ZtjUZ1tJwXq0Jkk/giphy.gif',
+                gifFallback: '',
+                answer: '羞羞羞！那凭截图可以让<span class="highlight">小乞丐摸葱葱欧派</span>一次好了！<span class="highlight">就一次哦！</span> ',
+            },
+        };
+        // 选择选项
+        function selectOption(optionKey) {
+            const data = answerData[optionKey];
+            if (!data) return;
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalEmoji = document.getElementById('modalEmoji');
+            const modalGif = document.getElementById('modalGif');
+            const modalAnswer = document.getElementById('modalAnswer');
+            // 设置弹窗内容
+            modalEmoji.textContent = data.emoji;
+            modalGif.src = data.gif;
+            modalGif.alt = '回答图片 - 选项' + optionKey;
+            modalGif.onerror = function() {
+                // 图片加载失败时显示备用emoji
+                this.style.display = 'none';
+                modalEmoji.textContent = data.gifFallback + ' ' + data.emoji;
+                modalEmoji.style.fontSize = '4rem';
+            };
+            modalGif.onload = function() {
+                this.style.display = 'block';
+                modalEmoji.style.fontSize = '2.5rem';
+                modalEmoji.textContent = data.emoji;
+            };
+            modalGif.style.display = 'block';
+            modalAnswer.innerHTML = data.answer;
+            // 显示弹窗
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (navigator.vibrate) {
+                navigator.vibrate(15);
+            }
+        }
+        // 关闭弹窗（点击遮罩）
+        function closeModal(event) {
+            if (event.target === document.getElementById('modalOverlay')) {
+                closeModalDirect();
+            }
+        }
+        function closeModalDirect() {
+            const modalOverlay = document.getElementById('modalOverlay');
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        // 键盘控制
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modalOverlay = document.getElementById('modalOverlay');
+                if (modalOverlay.classList.contains('active')) {
+                    closeModalDirect();
+                }
+            }
+            if (e.key === '1' || e.key.toLowerCase() === 'a') selectOption('A');
+            if (e.key === '2' || e.key.toLowerCase() === 'b') selectOption('B');
+            if (e.key === '3' || e.key.toLowerCase() === 'c') selectOption('C');
+            if (e.key === '4' || e.key.toLowerCase() === 'd') selectOption('D');
+        });
+        // 生成背景浮动粒子
+        function createParticles() {
+            const container = document.getElementById('particlesContainer');
+            const colors = [
+                '#f7b89c', '#f0a8b8', '#e8c98b', '#b8d4a8',
+                '#d4b8d4', '#f7c8b8', '#e8d5c8', '#c8d8e8',
+                '#f0c8c0', '#e0c8d0', '#d8e0c8', '#f5d8c8',
+            ];
+            for (let i = 0; i < 28; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 14 + 6;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 94 + '%';
+                particle.style.top = Math.random() * 90 + '%';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.animationDuration = (Math.random() * 16 + 10) + 's';
+                particle.style.animationDelay = (Math.random() * 12) + 's';
+                particle.style.opacity = Math.random() * 0.4 + 0.2;
+                if (Math.random() < 0.2) {
+                    particle.style.borderRadius = '50% 50% 10% 50%';
+                    particle.style.transform = 'rotate(45deg)';
+                    particle.style.width = (size * 1.3) + 'px';
+                    particle.style.height = (size * 1.3) + 'px';
+                }
+                container.appendChild(particle);
+            }
+        }
+        function init() {
+            createParticles();
+            // 预加载弹窗图片
+            Object.values(answerData).forEach(data => {
+                const img = new Image();
+                img.src = data.gif;
+            });
+        }
+        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.closest('.option-card') && e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
+
